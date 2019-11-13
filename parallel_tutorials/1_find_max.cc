@@ -1,7 +1,7 @@
 #include "Timer.hh"
 
 
-#define SIZE 65536
+#define SIZE 65536*1024
 #define THREAD_COUNT 4
 
 
@@ -58,7 +58,6 @@ int pthreadFindMax(std::vector<int>& vec)
     // get the max from the return values of threads
     return  *std::max_element(retValues.begin(), retValues.end());    
 }
-
 
 typedef void *(*VoidFuncType)(void *);
 
@@ -146,7 +145,7 @@ int ompReductionFindMax(std::vector<int>& vec)
     return maxVal;
 }
 
-int cppThreadsFindMax(std::vector<int> vec)
+int cppThreadsFindMax(std::vector<int>& vec)
 {
     std::vector<int> retValues(THREAD_COUNT);
 
@@ -191,15 +190,8 @@ int findMax(std::vector<int>& vec)
 
 int main()
 {
-    std::mt19937 randGen(11);
-    std::uniform_int_distribution<int> ditribution(0, 10000);
-    auto gen = [&ditribution, &randGen]() {
-        return ditribution(randGen);
-    };
-
     std::vector<int> vec(SIZE);
     std::iota (std::begin(vec), std::end(vec), 0);
-    // std::generate(vec.begin(), vec.end(), gen);    
     
     int max = 0;
 
